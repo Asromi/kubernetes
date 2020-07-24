@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rstemplate
+  labels:
+    team: devalbedo
+    version: 1.0.0
+    environment: production
+  annotations:
+    description: Ini adalah aplikasi yang dibuat oleh tim devalbedo
+    apapun: Apapun itu....
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: template
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - template
+          - app
+      - key: env
+        operator: In
+        values:
+          - production
+          - development
+  template:
+    metadata:
+      name: podtemplate
+      labels:
+        app: template
+        env: production
+      annotations:
+        description: ini pod template
+    spec:
+      containers:
+        - name: template
+          image: imgtemplate:tag
+          ports:
+            - containerPort: 80
+          networks:
+            default:
+              external:
+                name: netapp
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          

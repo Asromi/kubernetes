@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rsasset
+  labels:
+    team: devalbedo
+    version: 1.0.0
+    environment: production
+  annotations:
+    description: ReplicaSet pod production application asset vs 1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: asset
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - asset
+          - app
+      - key: env
+        operator: In
+        values:
+          - production
+          - development
+  template:
+    metadata:
+      name: podasset
+      labels:
+        app: asset
+        env: production
+      annotations:
+        description: pod asset
+    spec:
+      containers:
+        - name: asset
+          image: albedo/asset:1.0
+          ports:
+            - containerPort: 8080
+          networks:
+            default:
+              external:
+                name: netapp
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          

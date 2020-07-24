@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rssvcasset
+  labels:
+    team: devalbedo
+    version: 1.0.0
+    environment: production
+  annotations:
+    description: ReplicaSet pod production service asset vs 1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: svcasset
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - svcasset
+          - api
+      - key: env
+        operator: In
+        values:
+          - production
+          - development
+  template:
+    metadata:
+      name: podsvcasset
+      labels:
+        app: svcasset
+        env: production
+      annotations:
+        description: pod svcasset
+    spec:
+      containers:
+        - name: svcasset
+          image: asromi/svc:asset
+          ports:
+            - containerPort: 4210
+          networks:
+            default:
+              external:
+                name: netapp
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          

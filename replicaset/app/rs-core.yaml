@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rscore
+  labels:
+    team: devalbedo
+    version: 1.0.0
+    environment: production
+  annotations:
+    description: ReplicaSet pod production application core vs 1.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: core
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - core
+          - app
+      - key: env
+        operator: In
+        values:
+          - production
+          - development
+  template:
+    metadata:
+      name: podcore
+      labels:
+        app: core
+        env: production
+      annotations:
+        description: pod core
+    spec:
+      containers:
+        - name: core
+          image: albedo/core:1.0
+          ports:
+            - containerPort: 8080
+          networks:
+            default:
+              external:
+                name: netapp
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          

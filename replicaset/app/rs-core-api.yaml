@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rssvccore
+  labels:
+    team: devalbedo
+    version: 1.0.0
+    environment: production
+  annotations:
+    description: ReplicaSet pod production service core vs 1.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: svccore
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - svccore
+          - api
+      - key: env
+        operator: In
+        values:
+          - production
+          - development
+  template:
+    metadata:
+      name: podsvccore
+      labels:
+        app: svccore
+        env: production
+      annotations:
+        description: pod svccore
+    spec:
+      containers:
+        - name: svccore
+          image: asromi/svc:core
+          ports:
+            - containerPort: 4200
+          networks:
+            default:
+              external:
+                name: netapp
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          
