@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: rssvcasset
   labels:
-    team: devalbedo
+    team: devapp
     version: 1.0.0
     environment: production
   annotations:

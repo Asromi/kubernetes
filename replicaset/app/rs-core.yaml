@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: rscore
   labels:
-    team: devalbedo
+    team: devapp
     version: 1.0.0
     environment: production
   annotations:
@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: core
-          image: albedo/core:1.0
+          image: app/core:1.0
           ports:
             - containerPort: 8080
           networks:

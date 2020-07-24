@@ -3,12 +3,12 @@ kind: ReplicaSet
 metadata:
   name: rsdbredis
   labels:
-    team: devalbedo
+    team: devapp
     version: 1.0.0
     environment: production
   annotations:
     description: ReplicaSet pod production database redis vs 1.0.0
-    user: all service albedo
+    user: all service app
 spec:
   replicas: 1
   selector:

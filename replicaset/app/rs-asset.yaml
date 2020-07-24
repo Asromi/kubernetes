@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: rsasset
   labels:
-    team: devalbedo
+    team: devapp
     version: 1.0.0
     environment: production
   annotations:
@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: asset
-          image: albedo/asset:1.0
+          image: app/asset:1.0
           ports:
             - containerPort: 8080
           networks:

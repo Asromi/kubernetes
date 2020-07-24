@@ -3,11 +3,11 @@ kind: ReplicaSet
 metadata:
   name: rstemplate
   labels:
-    team: devalbedo
+    team: devapp
     version: 1.0.0
     environment: production
   annotations:
-    description: Ini adalah aplikasi yang dibuat oleh tim devalbedo
+    description: Ini adalah aplikasi yang dibuat oleh tim devapp
     apapun: Apapun itu....
 spec:
   replicas: 3
